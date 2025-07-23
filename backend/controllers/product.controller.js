@@ -63,6 +63,13 @@ export const updateProduct = async(req,res) => {
 
 export const deleteProduct = async(req,res) => {
     const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(404).json({
+            success: false, 
+            message:"Invalid product id"
+        });
+    }
     
     try {
         await Product.findByIdAndDelete(id);
@@ -72,9 +79,9 @@ export const deleteProduct = async(req,res) => {
         });
     } catch (error) {
         console.log("Error while deleting product", error.message)
-        res.status(404).json({
+        res.status(500).json({
             success: false,
-            message: "Error deleting product"
+            message: "Server error"
         });
     }
 };
